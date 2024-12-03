@@ -27,7 +27,7 @@ module "jenkins_master" {
 
   subnet_id             = module.vpc.subnet_id
   jenkins_instance_name = "vpanainte-jenkins-master"
-  jenkins_instance_id   = "vpanainte-jenkins-master"
+  jenkins_instance_id   = "jenkins-master"
 }
 
 module "jenkins_node" {
@@ -36,6 +36,6 @@ module "jenkins_node" {
 
   subnet_id             = module.vpc.subnet_id
   jenkins_instance_name = "vpanainte-jenkins-node-${count.index + 1}"
-  jenkins_instance_id   = "vpanainte-jenkins-node"
+  jenkins_instance_id   = "jenkins-node"
   jenkins_instance_type = "e2-highcpu-4"
 }
