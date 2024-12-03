@@ -11,7 +11,7 @@ variable "jenkins_instance_name" {
 variable "jenkins_instance_type" {
   type        = string
   description = "Jenkins instance type"
-  default     = "e2-micro"
+  default     = "e2-small"
 }
 
 variable "jenkins_image" {
