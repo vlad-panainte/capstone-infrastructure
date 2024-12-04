@@ -6,6 +6,7 @@ resource "google_compute_instance" "jenkins" {
   network_interface {
     subnetwork = var.subnet_id
     access_config {}
+    network_ip = var.jenkins_internal_ip
   }
 
   boot_disk {

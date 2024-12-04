@@ -28,6 +28,7 @@ module "jenkins_master" {
   subnet_id             = module.vpc.subnet_id
   jenkins_instance_name = "vpanainte-jenkins-master"
   jenkins_instance_id   = "jenkins-master"
+  jenkins_internal_ip   = "10.0.0.2"
 }
 
 module "jenkins_node" {
@@ -38,4 +39,5 @@ module "jenkins_node" {
   jenkins_instance_name = "vpanainte-jenkins-node-${count.index + 1}"
   jenkins_instance_id   = "jenkins-node"
   jenkins_instance_type = "e2-highcpu-4"
+  jenkins_internal_ip   = "10.0.0.${count.index + 3}"
 }

@@ -14,6 +14,12 @@ variable "jenkins_instance_type" {
   default     = "e2-small"
 }
 
+variable "jenkins_internal_ip" {
+  type        = string
+  description = "Jenkins instance internal ip"
+  default     = null
+}
+
 variable "jenkins_image" {
   type        = string
   description = "Boot disk image"
