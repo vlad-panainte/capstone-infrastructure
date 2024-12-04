@@ -1,0 +1,42 @@
+---
+- name: Installing Jenkins on master node
+  hosts: vpanainte_capstone_jenkins_master
+  become: true
+  tasks:
+    - name: Installing Jenkins prerequisites
+      ansible.builtin.apt:
+        name:
+          - default-jre
+          - git
+        state: present
+        update_cache: true
+
+    - name: Installing Jenkins repository GPG key
+      ansible.builtin.get_url:
+        url: https://pkg.jenkins.io/debian/jenkins.io-2023.key
+        dest: /usr/share/keyrings/jenkins-keyring.asc
+        owner: root
+        group: root
+        mode: '0444'
+
+    - name: Adding Jenkins repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/"
+      notify:
+        - Updating APT cache
+
+    - name: Installing Jenkins
+      ansible.builtin.apt:
+        name: jenkins
+        state: present
+      notify: Starting and enabling Jenkins service
+
+  handlers:
+    - name: Updating APT cache
+      ansible.builtin.apt:
+        update_cache: true
+    - name: Starting and enabling Jenkins service
+      ansible.builtin.systemd_service:
+        name: jenkins.service
+        state: started
+        enabled: true
