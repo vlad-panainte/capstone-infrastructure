@@ -29,8 +29,13 @@
       ansible.builtin.apt:
         name: jenkins
         state: present
-      notify: Starting and enabling Jenkins service
 
+    - name: Disabling setup wizard
+      ansible.builtin.lineinfile:
+        path: /usr/lib/systemd/system/jenkins.service
+        search_string: "Environment=\"JAVA_OPTS=-Djava.awt.headless=true\""
+        line: "Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false\""
+      notify: Starting and enabling Jenkins service
   handlers:
     - name: Updating APT cache
       ansible.builtin.apt:
@@ -38,5 +43,6 @@
     - name: Starting and enabling Jenkins service
       ansible.builtin.systemd_service:
         name: jenkins.service
-        state: started
+        state: restarted
+        daemon_reload: true
         enabled: true
