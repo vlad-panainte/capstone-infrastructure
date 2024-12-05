@@ -5,3 +5,6 @@
 
 *.tfstate
 *.tfstate.*
+
+# Ansible
+vars.yml
