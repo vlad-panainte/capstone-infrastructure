@@ -1,0 +1,115 @@
+---
+- name: Installing Jenkins on master node
+  hosts: vpanainte_capstone_jenkins_master
+  become: true
+  vars_files:
+    - vars/vars.yml
+  tasks:
+    - name: Installing Jenkins prerequisites
+      ansible.builtin.apt:
+        name:
+          - default-jre
+          - git
+        state: present
+        update_cache: true
+
+    - name: Installing Jenkins repository GPG key
+      ansible.builtin.get_url:
+        url: https://pkg.jenkins.io/debian/jenkins.io-2023.key
+        dest: /usr/share/keyrings/jenkins-keyring.asc
+        owner: root
+        group: root
+        mode: '0444'
+
+    - name: Adding Jenkins repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/"
+      notify:
+        - Updating APT cache
+
+    - name: Installing Jenkins
+      ansible.builtin.apt:
+        name: jenkins
+        state: present
+
+    - name: Disabling setup wizard
+      ansible.builtin.lineinfile:
+        path: /usr/lib/systemd/system/jenkins.service
+        search_string: "Environment=\"JAVA_OPTS=-Djava.awt.headless=true\""
+        line: "Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jenkins.yaml\""
+      notify: Starting and enabling Jenkins service
+
+    - name: Generating SSH keypair for SSH agent connection
+      block:
+        - name: Creating .ssh directory on master node
+          ansible.builtin.file:
+            path: /var/lib/jenkins/.ssh
+            state: directory
+            owner: jenkins
+            group: jenkins
+            mode: '0700'
+        - name: Generating SSH keypair for SSH agent connection
+          ansible.builtin.openssh_keypair:
+            state: present
+            type: ed25519
+            path: /var/lib/jenkins/.ssh/id_ed25519
+            owner: jenkins
+            group: jenkins
+            mode: '0400'
+          register: ssh_key
+
+    - name: Fetching initial admin password for Jenkins master node
+      ansible.builtin.slurp:
+        src: /var/lib/jenkins/secrets/initialAdminPassword
+      register: jenkins_admin_password
+
+    - name: Installing Jenkins Plugins
+      ansible.builtin.jenkins_plugin:
+        name: "{{ item }}"
+        state: present
+        url_username: admin
+        url_password: "{{ (jenkins_admin_password.content | b64decode)[:-1] }}"
+      with_items:
+        - cloudbees-folder
+        - antisamy-markup-formatter
+        - build-timeout
+        - credentials-binding
+        - timestamper
+        - ws-cleanup
+        - workflow-aggregator
+        - github-branch-source
+        - pipeline-github-lib
+        - pipeline-graph-view
+        - git
+        - github
+        - ssh-slaves
+        - matrix-auth
+        - dark-theme
+        - configuration-as-code
+        - docker-plugin
+        - docker-commons
+        - docker-workflow
+        - docker-java-api
+      notify: Starting and enabling Jenkins service
+
+    - name: Copying Jekins Configuration as Code file to Jenkins directory
+      vars:
+        master_public_ip: "{{ groups['vpanainte_capstone_jenkins_master'][0] }}"
+      ansible.builtin.template:
+        src: templates/jenkins.yaml.j2
+        dest: /var/lib/jenkins/jenkins.yaml
+        owner: jenkins
+        group: jenkins
+        mode: '0600'
+      notify: Starting and enabling Jenkins service
+
+  handlers:
+    - name: Updating APT cache
+      ansible.builtin.apt:
+        update_cache: true
+    - name: Starting and enabling Jenkins service
+      ansible.builtin.systemd_service:
+        name: jenkins.service
+        state: restarted
+        daemon_reload: true
+        enabled: true

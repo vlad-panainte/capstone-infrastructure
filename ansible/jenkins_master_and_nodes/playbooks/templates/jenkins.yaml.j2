@@ -1,0 +1,254 @@
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - basicSSHUserPrivateKey:
+              description: "Master Node - SSH Private Key"
+              id: "master_node_ssh_private_key"
+              privateKeySource:
+                directEntry:
+                  privateKey: "${readFile:/var/lib/jenkins/.ssh/id_ed25519}"
+              scope: GLOBAL
+              username: "jenkins"
+          - string:
+              description: "GitHub access token"
+              id: "github_access_token"
+              scope: GLOBAL
+              secret: "{{ gh_access_token }}"
+jenkins:
+  authorizationStrategy:
+    globalMatrix:
+      entries:
+        - group:
+            name: "authenticated"
+            permissions:
+              - "Job/Read"
+              - "Overall/Read"
+        - user:
+            name: "anonymous"
+            permissions:
+              - "Job/Read"
+              - "Overall/Read"
+        - user:
+            name: "vpanainte"
+            permissions:
+              - "Agent/Build"
+              - "Agent/Configure"
+              - "Agent/Connect"
+              - "Agent/Create"
+              - "Agent/Delete"
+              - "Agent/Disconnect"
+              - "Agent/Provision"
+              - "Credentials/Create"
+              - "Credentials/Delete"
+              - "Credentials/ManageDomains"
+              - "Credentials/Update"
+              - "Credentials/View"
+              - "Job/Build"
+              - "Job/Cancel"
+              - "Job/Configure"
+              - "Job/Create"
+              - "Job/Delete"
+              - "Job/Discover"
+              - "Job/Move"
+              - "Job/Read"
+              - "Job/Workspace"
+              - "Overall/Administer"
+              - "Overall/Read"
+              - "Run/Delete"
+              - "Run/Replay"
+              - "Run/Update"
+              - "SCM/Tag"
+              - "View/Configure"
+              - "View/Create"
+              - "View/Delete"
+              - "View/Read"
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: false
+  disableRememberMe: false
+  disabledAdministrativeMonitors:
+    - "hudson.node_monitors.MonitorMarkedNodeOffline"
+    - "jenkins.diagnostics.ControllerExecutorsNoAgents"
+    - "hudson.util.DoubleLaunchChecker"
+    - "hudson.diagnosis.ReverseProxySetupMonitor"
+  labelAtoms:
+    - name: "built-in"
+    - name: "master-node"
+    - name: "node-1"
+    - name: "node-2"
+    - name: "slave-node"
+  labelString: "master-node"
+  markupFormatter: "plainText"
+  mode: EXCLUSIVE
+  myViewsTabBar: "standard"
+  noUsageStatistics: true
+  nodeMonitors:
+    - "architecture"
+    - "clock"
+    - diskSpace:
+        freeSpaceThreshold: "1GiB"
+        freeSpaceWarningThreshold: "2GiB"
+    - "swapSpace"
+    - tmpSpace:
+        freeSpaceThreshold: "1GiB"
+        freeSpaceWarningThreshold: "2GiB"
+    - "responseTime"
+  nodes:
+    - permanent:
+        labelString: "slave-node"
+        launcher:
+          ssh:
+            credentialsId: "master_node_ssh_private_key"
+            host: "10.0.0.3"
+            port: 22
+            sshHostKeyVerificationStrategy:
+              manuallyTrustedKeyVerificationStrategy:
+                requireInitialManualTrust: false
+        name: "node-1"
+        numExecutors: 4
+        remoteFS: "/var/jenkins"
+        retentionStrategy: "always"
+    - permanent:
+        labelString: "slave-node"
+        launcher:
+          ssh:
+            credentialsId: "master_node_ssh_private_key"
+            host: "10.0.0.4"
+            port: 22
+            sshHostKeyVerificationStrategy:
+              manuallyTrustedKeyVerificationStrategy:
+                requireInitialManualTrust: false
+        name: "node-2"
+        numExecutors: 4
+        remoteFS: "/var/jenkins"
+        retentionStrategy: "always"
+  numExecutors: 0
+  primaryView:
+    all:
+      name: "all"
+  projectNamingStrategy: "standard"
+  quietPeriod: 5
+  remotingSecurity:
+    enabled: true
+  scmCheckoutRetryCount: 0
+  securityRealm:
+    local:
+      allowsSignup: false
+      enableCaptcha: false
+      users:
+        - id: "vpanainte"
+          name: "Vlad-Costin Panainte"
+          password: "{{ jenkins_new_admin_password }}"
+          properties:
+            - "myView"
+            - "theme"
+            - "experimentalFlags"
+            - "apiToken"
+            - "consoleUrlProvider"
+            - mailer:
+                emailAddress: "vpanainte@griddynamics.com"
+            - preferredProvider:
+                providerId: "default"
+            - timezone:
+                timeZoneName: "Europe/Bucharest"
+  slaveAgentPort: -1
+  updateCenter:
+    sites:
+      - id: "default"
+        url: "https://updates.jenkins.io/update-center.json"
+  views:
+    - all:
+        name: "all"
+  viewsTabBar: "standard"
+globalCredentialsConfiguration:
+  configuration:
+    providerFilter: "none"
+    typeFilter: "none"
+appearance:
+  prism:
+    theme: PRISM
+  themeManager:
+    disableUserThemes: false
+    theme: "darkSystem"
+security:
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+  cps:
+    hideSandbox: false
+  gitHooks:
+    allowedOnAgents: false
+    allowedOnController: true
+  gitHostKeyVerificationConfiguration:
+    sshHostKeyVerificationStrategy: "acceptFirstConnectionStrategy"
+  scriptApproval:
+    forceSandbox: false
+unclassified:
+  buildDiscarders:
+    configuredBuildDiscarders:
+      - "jobBuildDiscarder"
+  buildStepOperation:
+    enabled: false
+  fingerprints:
+    fingerprintCleanupDisabled: false
+    storage: "file"
+  gitHubConfiguration:
+    apiRateLimitChecker: ThrottleForNormalize
+  gitHubPluginConfig:
+    configs:
+      - credentialsId: "github_access_token"
+        name: "GitHub - Default"
+    hookUrl: "http://{{ master_public_ip }}:8080/github-webhook/"
+  globalTimeOutConfiguration:
+    operations:
+      - "abortOperation"
+    overwriteable: false
+  junitTestResultStorage:
+    storage: "file"
+  location:
+    adminAddress: "vpanainte@griddynamics.com"
+    url: "http://{{ master_public_ip }}:8080/"
+  mailer:
+    charset: "UTF-8"
+    useSsl: false
+    useTls: false
+  pollSCM:
+    pollingThreadCount: 10
+  scmGit:
+    addGitTagAction: false
+    allowSecondFetch: false
+    createAccountBasedOnEmail: false
+    disableGitToolChooser: false
+    hideCredentials: false
+    showEntireCommitSummaryInChanges: false
+    useExistingAccountWithSameEmail: false
+  timestamper:
+    allPipelines: false
+    elapsedTimeFormat: "'<b>'HH:mm:ss.S'</b> '"
+    systemTimeFormat: "'<b>'HH:mm:ss'</b> '"
+tool:
+  dockerTool:
+    installations:
+      - name: "docker_latest"
+        properties:
+          - installSource:
+              installers:
+                - fromDocker:
+                    version: "latest"
+  git:
+    installations:
+      - home: "git"
+        name: "Default"
+  maven:
+    installations:
+      - name: "maven_latest"
+        properties:
+          - installSource:
+              installers:
+                - maven:
+                    id: "3.9.9"
+  mavenGlobalConfig:
+    globalSettingsProvider: "standard"
+    settingsProvider: "standard"

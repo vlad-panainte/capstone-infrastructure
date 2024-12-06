@@ -1,0 +1,11 @@
+---
+- name: Waiting for Jenkins instance to be available
+  hosts: vpanainte_capstone_jenkins_master
+  gather_facts: false
+  tasks:
+    - name: Waiting for instance to be available
+      ansible.builtin.wait_for:
+        host: "{{ groups['vpanainte_capstone_jenkins_master'][0] }}"
+        port: 22
+        delay: 20
+      delegate_to: localhost
