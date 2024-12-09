@@ -1,0 +1,11 @@
+---
+- name: Waiting for the instance to become available
+  ansible.builtin.import_playbook: wait_for_jenkins_master.yml
+
+- name: Configuring Jenkins master node
+  ansible.builtin.import_playbook: jenkins_master.yml
+
+- name: Configuring Jenkins slave nodes
+  ansible.builtin.import_playbook: jenkins_nodes.yml
+  vars:
+    ssh_key: "{{ hostvars[groups['vpanainte_capstone_jenkins_master'][0]].ssh_key.public_key }}"

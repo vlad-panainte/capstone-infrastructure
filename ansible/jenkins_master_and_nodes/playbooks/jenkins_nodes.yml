@@ -1,27 +1,4 @@
 ---
-- name: Generating SSH keypair for SSH agent connection
-  hosts: vpanainte_capstone_jenkins_master
-  become: true
-  tasks:
-    - name: Generating SSH keypair for SSH agent connection
-      block:
-        - name: Creating .ssh directory on master node
-          ansible.builtin.file:
-            path: /var/lib/jenkins/.ssh
-            state: directory
-            owner: jenkins
-            group: jenkins
-            mode: '0700'
-        - name: Generating SSH keypair for SSH agent connection
-          ansible.builtin.openssh_keypair:
-            state: present
-            type: ed25519
-            path: /var/lib/jenkins/.ssh/id_ed25519
-            owner: jenkins
-            group: jenkins
-            mode: '0400'
-          register: ssh_key
-
 - name: Configuring node agents
   hosts: vpanainte_capstone_jenkins_node
   become: true
@@ -39,8 +16,9 @@
         create_home: true
         home: /var/jenkins
         state: present
+
     - name: Adding master node public key to the list of authorized_keys on agent nodes
       ansible.builtin.authorized_key:
         user: jenkins
         state: present
-        key: "{{ hostvars[groups['vpanainte_capstone_jenkins_master'][0]].ssh_key.public_key }}"
+        key: "{{ ssh_key }}"
