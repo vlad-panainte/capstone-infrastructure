@@ -24,13 +24,13 @@
     - name: Adding Jenkins repository
       ansible.builtin.apt_repository:
         repo: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/"
-      notify:
-        - Updating APT cache
+        update_cache: true
 
     - name: Installing Jenkins
       ansible.builtin.apt:
         name: jenkins
         state: present
+      notify: Starting and enabling Jenkins service
 
     - name: Disabling setup wizard
       ansible.builtin.lineinfile:
@@ -41,7 +41,7 @@
 
     - name: Generating SSH keypair for SSH agent connection
       block:
-        - name: Creating .ssh directory on master node
+        - name: Creating .ssh directory
           ansible.builtin.file:
             path: /var/lib/jenkins/.ssh
             state: directory
@@ -104,9 +104,6 @@
       notify: Starting and enabling Jenkins service
 
   handlers:
-    - name: Updating APT cache
-      ansible.builtin.apt:
-        update_cache: true
     - name: Starting and enabling Jenkins service
       ansible.builtin.systemd_service:
         name: jenkins.service

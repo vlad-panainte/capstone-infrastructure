@@ -1,36 +1,50 @@
 ---
-- name: Generating SSH keypair for SSH agent connection
-  hosts: vpanainte_capstone_jenkins_master
-  become: true
-  tasks:
-    - name: Generating SSH keypair for SSH agent connection
-      block:
-        - name: Creating .ssh directory on master node
-          ansible.builtin.file:
-            path: /var/lib/jenkins/.ssh
-            state: directory
-            owner: jenkins
-            group: jenkins
-            mode: '0700'
-        - name: Generating SSH keypair for SSH agent connection
-          ansible.builtin.openssh_keypair:
-            state: present
-            type: ed25519
-            path: /var/lib/jenkins/.ssh/id_ed25519
-            owner: jenkins
-            group: jenkins
-            mode: '0400'
-          register: ssh_key
-
 - name: Configuring node agents
   hosts: vpanainte_capstone_jenkins_node
   become: true
   tasks:
-    - name: Installing Java Runtime
-      ansible.builtin.apt:
-        name: default-jre
-        state: present
-        update_cache: true
+    - name: Installing required packages
+      block:
+        - name: Installing Java Runtime for Jenkins agent
+          ansible.builtin.apt:
+            name: default-jre
+            state: present
+            update_cache: true
+
+        - name: Installing Docker GPG key
+          ansible.builtin.get_url:
+            url: https://download.docker.com/linux/ubuntu/gpg
+            dest: /etc/apt/keyrings/docker.asc
+            owner: root
+            group: root
+            mode: '0444'
+
+        - name: Installing Terraform repository GPG key
+          ansible.builtin.get_url:
+            url: https://apt.releases.hashicorp.com/gpg
+            dest: /etc/apt/keyrings/hashicorp.asc
+            owner: root
+            group: root
+            mode: '0444'
+
+        - name: Adding Docker Repository
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+            update_cache: true
+
+        - name: Adding Terraform repository
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/hashicorp.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+            update_cache: true
+
+        - name: Installing Docker, Terraform and Ansible
+          ansible.builtin.apt:
+            name:
+              - docker-ce
+              - docker-ce-cli
+              - terraform
+              - ansible
+            state: present
 
     - name: Creating jenkins user
       ansible.builtin.user:
@@ -39,8 +53,9 @@
         create_home: true
         home: /var/jenkins
         state: present
+
     - name: Adding master node public key to the list of authorized_keys on agent nodes
       ansible.builtin.authorized_key:
         user: jenkins
         state: present
-        key: "{{ hostvars[groups['vpanainte_capstone_jenkins_master'][0]].ssh_key.public_key }}"
+        key: "{{ ssh_key }}"
