@@ -4,13 +4,13 @@ pipeline {
         stage('CodeFormat') {
             steps {
                 script {
-                    checkout scm
                     dir('./terraform') {
                         def files = findFiles()
 
                         files.each { f->
                             if (f.directory) {
-                                echo "Terraform projects: ${f.name}"
+                                echo "Using terraform fmt on project: ${f.name}"
+                                sh "terraform -chdir=${f.name} fmt"
                             }
                         }
                     }
