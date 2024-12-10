@@ -76,6 +76,6 @@ Use a Cloud-based monitoring solution to create a dashboard with resource consum
 
 ## 4. Architecture diagram
 Create an architecture diagram for your solution. The following resources can be used as a reference:
-* [AWS Reference Architecture Diagrams](https://aws.amazon.com/architecture/reference-architecture-diagrams&sa=D&source=editors&ust=1732701939598982&usg=AOvVaw0bD_DnNu7B5wPaCzjFw92C)
-* [GCP Cloud Reference Architectures and Diagrams](https://cloud.google.com/architecture&sa=D&source=editors&ust=1732701939599200&usg=AOvVaw2dmKUcTZsJwtqVmOi7ITR6)
-* [Azure Architectures](https://learn.microsoft.com/en-us/azure/architecture/browse/&sa=D&source=editors&ust=1732701939599430&usg=AOvVaw1n4tTsIh86koMS4_uyQVP2)
+* [AWS Reference Architecture Diagrams](https://aws.amazon.com/architecture/reference-architecture-diagrams)
+* [GCP Cloud Reference Architectures and Diagrams](https://cloud.google.com/architecture)
+* [Azure Architectures](https://learn.microsoft.com/en-us/azure/architecture/browse)
