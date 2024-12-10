@@ -15,6 +15,12 @@ credentials:
               id: "github_access_token"
               scope: GLOBAL
               secret: "{{ gh_access_token }}"
+          - usernamePassword:
+              description: "GitHub Access Token for Pipeline"
+              id: "github_access_token_pipeline"
+              password: "{{ gh_access_token }}"
+              scope: GLOBAL
+              username: "vlad-panainte"
 jenkins:
   authorizationStrategy:
     globalMatrix:
