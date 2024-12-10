@@ -80,6 +80,7 @@
         - github-branch-source
         - pipeline-github-lib
         - pipeline-graph-view
+        - pipeline-utility-steps
         - git
         - github
         - ssh-slaves
