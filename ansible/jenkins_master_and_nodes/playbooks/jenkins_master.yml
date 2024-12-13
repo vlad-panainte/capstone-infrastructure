@@ -104,6 +104,24 @@
         mode: '0600'
       notify: Starting and enabling Jenkins service
 
+    - name: Importing Job configuration files
+      notify: Starting and enabling Jenkins service
+      block:
+        - name: Creating directory for storing provision_infrastructure job config
+          ansible.builtin.file:
+            path: /var/lib/jenkins/jobs/provision_infrastructure
+            state: directory
+            owner: jenkins
+            group: jenkins
+            mode: '0700'
+        - name: Copy job XML file to provision_infrastructure directory
+          ansible.builtin.copy:
+            src: files/jenkins_infra_provision_job.xml
+            dest: /var/lib/jenkins/jobs/provision_infrastructure/config.xml
+            owner: jenkins
+            group: jenkins
+            mode: '0600'
+
   handlers:
     - name: Starting and enabling Jenkins service
       ansible.builtin.systemd_service:
