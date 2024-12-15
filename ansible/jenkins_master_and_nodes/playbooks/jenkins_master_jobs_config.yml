@@ -14,7 +14,6 @@
         mode: '0600'
 
     - name: Importing Jenkins job configuration
-      notify: Restarting Jenkins service
       ansible.builtin.command: "java -jar jenkins-cli.jar create-job infrastructure_provision"
       args:
         chdir: /var/lib/jenkins
@@ -26,9 +25,3 @@
       register: import_result
       changed_when: import_result.rc == 0
       failed_when: (import_result.rc not in [0, 4])
-
-  handlers:
-    - name: Restarting Jenkins service
-      ansible.builtin.systemd_service:
-        name: jenkins.service
-        state: restarted
