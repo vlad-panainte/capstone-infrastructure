@@ -20,7 +20,7 @@
         stdin: "{{ lookup('file', 'files/jenkins_infra_provision_job.xml') }}"
       environment:
         JENKINS_URL: http://localhost:8080
-        JENKINS_USER_ID: vpanainte
+        JENKINS_USER_ID: "{{ jenkins_new_admin_username }}"
         JENKINS_API_TOKEN: "{{ jenkins_new_admin_password }}"
       register: import_result
       changed_when: import_result.rc == 0
