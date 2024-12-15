@@ -3,6 +3,20 @@
   hosts: vpanainte_capstone_jenkins_node
   become: true
   tasks:
+    - name: Creating jenkins user
+      ansible.builtin.user:
+        name: jenkins
+        shell: /bin/bash
+        create_home: true
+        home: /var/jenkins
+        state: present
+
+    - name: Adding master node public key to the list of authorized_keys on agent nodes
+      ansible.builtin.authorized_key:
+        user: jenkins
+        state: present
+        key: "{{ ssh_key }}"
+
     - name: Installing required packages
       block:
         - name: Installing Java Runtime for Jenkins agent
@@ -45,17 +59,3 @@
               - terraform
               - ansible
             state: present
-
-    - name: Creating jenkins user
-      ansible.builtin.user:
-        name: jenkins
-        shell: /bin/bash
-        create_home: true
-        home: /var/jenkins
-        state: present
-
-    - name: Adding master node public key to the list of authorized_keys on agent nodes
-      ansible.builtin.authorized_key:
-        user: jenkins
-        state: present
-        key: "{{ ssh_key }}"
