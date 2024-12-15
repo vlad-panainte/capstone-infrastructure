@@ -81,9 +81,11 @@ jenkins:
   labelAtoms:
     - name: "built-in"
     - name: "master-node"
-    - name: "node-1"
-    - name: "node-2"
     - name: "slave-node"
+    {% for i in range( (node_count | int) ) -%}
+    - name: "node-{{ i + 1 }}"
+    {% endfor %}
+
   labelString: "master-node"
   markupFormatter: "plainText"
   mode: EXCLUSIVE
@@ -101,34 +103,23 @@ jenkins:
         freeSpaceWarningThreshold: "2GiB"
     - "responseTime"
   nodes:
+    {% for i in range ( (node_count | int) ) -%}
     - permanent:
         labelString: "slave-node"
         launcher:
           ssh:
             credentialsId: "master_node_ssh_private_key"
-            host: "10.0.0.3"
+            host: "10.0.0.{{ i + 3 }}"
             port: 22
             sshHostKeyVerificationStrategy:
               manuallyTrustedKeyVerificationStrategy:
                 requireInitialManualTrust: false
-        name: "node-1"
-        numExecutors: 4
+        name: "node-{{ i + 1 }}"
+        numExecutors: {{ node_thread_count + 2 }}
         remoteFS: "/var/jenkins"
         retentionStrategy: "always"
-    - permanent:
-        labelString: "slave-node"
-        launcher:
-          ssh:
-            credentialsId: "master_node_ssh_private_key"
-            host: "10.0.0.4"
-            port: 22
-            sshHostKeyVerificationStrategy:
-              manuallyTrustedKeyVerificationStrategy:
-                requireInitialManualTrust: false
-        name: "node-2"
-        numExecutors: 4
-        remoteFS: "/var/jenkins"
-        retentionStrategy: "always"
+    {% endfor %}
+
   numExecutors: 0
   primaryView:
     all:
