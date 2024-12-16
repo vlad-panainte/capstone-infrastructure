@@ -29,8 +29,33 @@ pipeline {
         }
 
         stage('CodeLint') {
-            steps {
-                echo 'CodeLint step'
+            script {
+                dir('./terraform') {
+                    def files = findFiles()
+
+                    files.each { f->
+                        if (f.directory) {
+                            echo "Validating Terraform project: ${f.name}"
+                            sh "cd ${f.name} && terraform validate"
+
+                            echo "Using Terraform Lint on project: ${f.name}"
+                            sh "tflint --chdir=${f.name} --recursive --fix"
+                        }
+                    }
+                }
+                dir('./ansible') {
+                    def files = findFiles()
+
+                    files.each { f->
+                        if (f.directory) {
+                            echo "Validating Ansible project: ${f.name}"
+                            sh "ansible-playbook ${f.name}/main.yml --check"
+
+                            echo "Using Ansible Lint on project: ${f.name}"
+                            sh 'ansible-lint ${f.name}/playbooks/*.yml'
+                        }
+                    }
+                }
             }
         }
 
