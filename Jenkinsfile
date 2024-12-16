@@ -37,7 +37,7 @@ pipeline {
                         files.each { f->
                             if (f.directory) {
                                 echo "Validating Terraform project: ${f.name}"
-                                sh "cd ${f.name} && terraform validate"
+                                sh "cd ${f.name} && terraform init && terraform validate"
 
                                 echo "Using Terraform Lint on project: ${f.name}"
                                 sh "tflint --chdir=${f.name} --recursive --fix"
