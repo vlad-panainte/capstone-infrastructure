@@ -9,8 +9,18 @@ pipeline {
 
                         files.each { f->
                             if (f.directory) {
-                                echo "Using terraform fmt on project: ${f.name}"
+                                echo "Using terraform fmt on Terraform project: ${f.name}"
                                 sh "terraform -chdir=${f.name} fmt"
+                            }
+                        }
+                    }
+                    dir('./ansible') {
+                        def files = findFiles()
+
+                        files.each { f->
+                            if (f.directory) {
+                                echo "Using yamlfmt on Ansible project: ${f.name}"
+                                sh "yamlfmt ${f.directory}/"
                             }
                         }
                     }
