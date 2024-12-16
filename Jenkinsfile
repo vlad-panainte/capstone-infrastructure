@@ -20,7 +20,7 @@ pipeline {
                         files.each { f->
                             if (f.directory) {
                                 echo "Using yamlfmt on Ansible project: ${f.name}"
-                                sh "yamlfmt ${f.directory}/"
+                                sh "yamlfmt ${f.name}/"
                             }
                         }
                     }
