@@ -18,7 +18,7 @@
         state: present
 
     - name: Adding master node public key to the list of authorized_keys on agent nodes
-      ansible.builtin.authorized_key:
+      ansible.posix.authorized_key:
         user: jenkins
         state: present
         key: "{{ ssh_key }}"
