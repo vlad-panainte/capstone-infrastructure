@@ -14,7 +14,7 @@
         name: jenkins
         shell: /bin/bash
         create_home: true
-        home: /var/jenkins
+        home: /home/jenkins
         state: present
 
     - name: Adding master node public key to the list of authorized_keys on agent nodes
