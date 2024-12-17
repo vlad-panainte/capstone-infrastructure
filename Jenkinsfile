@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        TF_VAR_credentials_file = credentials('gcp_service_account')
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp_service_account')
         TF_VAR_project_id = 'gd-gcp-internship-devops'
         TF_VAR_region = 'europe-central2'
         TF_VAR_zone = 'europe-central2-a'
