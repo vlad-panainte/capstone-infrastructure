@@ -1,0 +1,27 @@
+---
+- name: Configuring Jenkins pipelines
+  hosts: vpanainte_capstone_jenkins_master
+  become: true
+  vars_files:
+    - vars/vars.yml
+  tasks:
+    - name: Downloading Jenkins CLI from master node
+      ansible.builtin.get_url:
+        url: http://localhost:8080/jnlpJars/jenkins-cli.jar
+        dest: /var/lib/jenkins/jenkins-cli.jar
+        owner: jenkins
+        group: jenkins
+        mode: '0600'
+
+    - name: Importing Jenkins job configuration
+      ansible.builtin.command: "java -jar jenkins-cli.jar create-job infrastructure_provision"
+      args:
+        chdir: /var/lib/jenkins
+        stdin: "{{ lookup('file', 'files/jenkins_infra_provision_job.xml') }}"
+      environment:
+        JENKINS_URL: http://localhost:8080
+        JENKINS_USER_ID: "{{ jenkins_new_admin_username }}"
+        JENKINS_API_TOKEN: "{{ jenkins_new_admin_password }}"
+      register: import_result
+      changed_when: import_result.rc == 0
+      failed_when: (import_result.rc not in [0, 4])

@@ -9,3 +9,6 @@
   ansible.builtin.import_playbook: jenkins_nodes.yml
   vars:
     ssh_key: "{{ hostvars[groups['vpanainte_capstone_jenkins_master'][0]].ssh_key.public_key }}"
+
+- name: Configuring Jenkins pipelines
+  ansible.builtin.import_playbook: jenkins_master_jobs_config.yml
