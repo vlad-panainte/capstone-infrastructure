@@ -1,16 +1,15 @@
 terraform {
-  required_version = "~> 1.10.1"
+  required_version = "~> 1.10.2"
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 6.12.0"
+      version = "~> 6.14.0"
     }
   }
 }
 
 provider "google" {
-  credentials = file(var.credentials_file)
-  project     = var.project_id
+  project = var.project_id
 }
 
 resource "google_storage_bucket" "terraform_state_bucket" {
