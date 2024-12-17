@@ -116,7 +116,7 @@ jenkins:
                 requireInitialManualTrust: false
         name: "node-{{ i + 1 }}"
         numExecutors: {{ node_thread_count + 2 }}
-        remoteFS: "/var/jenkins"
+        remoteFS: "/home/jenkins"
         retentionStrategy: "always"
     {% endfor %}
 
