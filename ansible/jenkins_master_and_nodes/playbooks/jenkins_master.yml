@@ -49,7 +49,7 @@
             group: jenkins
             mode: '0700'
         - name: Generating SSH keypair for SSH agent connection
-          ansible.builtin.openssh_keypair:
+          community.crypto.openssh_keypair:
             state: present
             type: ed25519
             path: /var/lib/jenkins/.ssh/id_ed25519
@@ -64,7 +64,7 @@
       register: jenkins_admin_password
 
     - name: Installing Jenkins Plugins
-      ansible.builtin.jenkins_plugin:
+      community.general.jenkins_plugin:
         name: "{{ item }}"
         state: present
         url_username: admin
