@@ -93,6 +93,14 @@
         - docker-java-api
       notify: Starting and enabling Jenkins service
 
+    - name: Copying GCP Service Account key to home directory
+      ansible.builtin.copy:
+        src: "{{ gcp_service_file_path }}"
+        dest: /var/lib/jenkins/gd-gcp-devops-6adbd6862eee.json
+        owner: jenkins
+        group: jenkins
+        mode: '0600'
+
     - name: Copying Jekins Configuration as Code file to Jenkins directory
       vars:
         master_public_ip: "{{ groups['vpanainte_capstone_jenkins_master'][0] }}"

@@ -21,6 +21,12 @@ credentials:
               password: "{{ gh_access_token }}"
               scope: GLOBAL
               username: "vlad-panainte"
+          - file:
+              description: "GCP Service Account"
+              id: "gcp_service_account"
+              fileName: "gd-gcp-internship-devops-6advd6862eee.json"
+              scope: GLOBAL
+              secretBytes: "${readFileBase64:/var/lib/jenkins/gd-gcp-devops-6adbd6862eee.json}"
 jenkins:
   authorizationStrategy:
     globalMatrix:
