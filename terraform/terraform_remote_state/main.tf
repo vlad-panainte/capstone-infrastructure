@@ -9,8 +9,7 @@ terraform {
 }
 
 provider "google" {
-  credentials = file(var.credentials_file)
-  project     = var.project_id
+  project = var.project_id
 }
 
 resource "google_storage_bucket" "terraform_state_bucket" {
