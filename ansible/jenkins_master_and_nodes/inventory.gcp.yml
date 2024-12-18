@@ -4,7 +4,6 @@ zones:
   - europe-central2-a
 projects:
   - gd-gcp-internship-devops
-auth_kind: application
 filters:
   - labels.capstone=jenkins-master OR labels.capstone=jenkins-node
 keyed_groups:
