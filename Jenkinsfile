@@ -6,6 +6,8 @@ pipeline {
         TF_VAR_region = 'europe-central2'
         TF_VAR_zone = 'europe-central2-a'
         TF_VAR_jenkins_nodes_number = 2
+        GCP_AUTH_KIND = 'serviceaccount'
+        GCP_SERVICE_ACCOUNT_FILE = credentials('gcp_service_account')
     }
     stages {
         stage('CodeFormat') {
@@ -57,7 +59,7 @@ pipeline {
                         files.each { f->
                             if (f.directory) {
                                 echo "Validating Ansible project: ${f.name}"
-                                sh "ansible-playbook ${f.name}/playbooks/main.yml --check"
+                                sh "cd ${f.name} && ansible-playbook playbooks/*.yml --syntax-check"
 
                                 echo "Using Ansible Lint on project: ${f.name}"
                                 sh "ansible-lint ${f.name}/playbooks/*.yml"
