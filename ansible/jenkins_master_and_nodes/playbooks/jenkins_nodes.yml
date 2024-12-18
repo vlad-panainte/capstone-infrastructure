@@ -51,7 +51,7 @@
             repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/hashicorp.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
             update_cache: true
 
-        - name: Installing Docker, Terraform, Ansible
+        - name: Installing Docker, Terraform, Ansible and their dependencies
           ansible.builtin.apt:
             name:
               - docker-ce
@@ -59,6 +59,7 @@
               - terraform
               - ansible
               - unzip
+              - python3-google-auth
             state: present
 
         - name: Installing yamlfmt
