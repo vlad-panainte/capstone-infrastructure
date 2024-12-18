@@ -7,7 +7,7 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket = "vpanainte-terraform-state"
+    bucket = "vpanainte-terraform-state-jenkins"
   }
 }
 

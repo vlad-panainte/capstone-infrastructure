@@ -3,9 +3,14 @@ variable "project_id" {
   description = "GCP project ID"
 }
 
-variable "terraform_state_bucket_name" {
+variable "terraform_state_bucket_name_jenkins" {
   type    = string
-  default = "Terraform state storage bucket name"
+  default = "Terraform state storage bucket name for Jenkins infrastructure"
+}
+
+variable "terraform_state_bucket_name_app" {
+  type    = string
+  default = "Terraform state storage bucket name for App infrastructure"
 }
 
 variable "terraform_state_bucket_location" {
