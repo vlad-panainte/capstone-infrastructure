@@ -59,7 +59,7 @@ pipeline {
                         files.each { f->
                             if (f.directory) {
                                 echo "Validating Ansible project: ${f.name}"
-                                sh "ansible-playbook ${f.name}/playbooks/main.yml --check"
+                                sh "ansible-playbook ${f.name}/playbooks/*.yml --syntax-check"
 
                                 echo "Using Ansible Lint on project: ${f.name}"
                                 sh "ansible-lint ${f.name}/playbooks/*.yml"
