@@ -6,6 +6,8 @@ pipeline {
         TF_VAR_region = 'europe-central2'
         TF_VAR_zone = 'europe-central2-a'
         TF_VAR_jenkins_nodes_number = 2
+        GCP_AUTH_KIND = 'serviceaccount'
+        GCP_SERVICE_ACCOUNT_FILE = credentials('gcp_service_account')
     }
     stages {
         stage('CodeFormat') {
