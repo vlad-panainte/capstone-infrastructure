@@ -15,8 +15,8 @@ pipeline {
         TF_VAR_artifact_repository_id = 'vpanainte-spring-petclinic'
         TF_VAR_artifact_repository_description = 'Repository for storing docker images for Spring-Petclinic application'
         TF_VAR_sql_database_name = 'vpanainte-mysql'
-        TF_VAR_sql_user_name = '$SQL_CREDENTIALS_USR'
-        TF_VAR_sql_user_password = '$SQL_CREDENTIALS_PSW'
+        TF_VAR_sql_user_name = "$SQL_CREDENTIALS_USR"
+        TF_VAR_sql_user_password = "$SQL_CREDENTIALS_PSW"
         TF_VAR_gke_name = 'vpanainte-cluster'
     }
     stages {
