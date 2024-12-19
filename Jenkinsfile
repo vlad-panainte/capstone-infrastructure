@@ -88,14 +88,28 @@ pipeline {
         }
 
         stage('InfraProvision') {
+            when {
+                branch 'main'
+            }
             steps {
-                echo 'InfraProvision step'
+                echo 'Attempting infrastructure provisioning'
+                input message: 'Should we start the provisioning of the infrastructure?', ok: 'Yes'
+
+                echo 'Starting the infrastructure provisioning for spring-petclinic application'
+                sh 'terraform -chdir=terraform/spring_petclinic_infrastructure apply --auto-approve'
             }
         }
 
         stage('InfraDestroy') {
+            when {
+                branch 'main'
+            }
             steps {
-                echo 'InfraDestroy step'
+                echo 'Attempting infrastructure destruction'
+                input message: 'Should we destroy the current the infrastructure?', ok: 'Yes'
+
+                echo 'Starting to destroythe infrastructure for spring-petclinic application'
+                sh 'terraform -chdir=terraform/spring_petclinic_infrastructure destroy --auto-approve'
             }
         }
     }
