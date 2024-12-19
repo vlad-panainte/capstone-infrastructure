@@ -58,6 +58,7 @@ resource "google_sql_database_instance" "cloud_sql" {
       disallow_username_substring = true
     }
   }
+  deletion_protection = false
 }
 
 resource "google_sql_user" "cloud_sql_user" {
