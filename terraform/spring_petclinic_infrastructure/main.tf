@@ -18,5 +18,7 @@ provider "google" {
 }
 
 module "artifact_repository" {
-  source = "./modules/artifact_repository"
+  source                          = "./modules/artifact_repository"
+  artifact_repository_id          = "vpanainte-spring-petclinic"
+  artifact_repository_description = "Repository for storing docker images for Spring-Petclinic application"
 }
