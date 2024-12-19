@@ -65,3 +65,23 @@ resource "google_sql_user" "cloud_sql_user" {
   password = var.sql_user_password
   instance = google_sql_database_instance.cloud_sql.name
 }
+
+data "google_compute_network" "vpc" {
+  name = "vpanainte-vpc"
+}
+
+data "google_compute_subnetwork" "subnet_1" {
+  name = "vpanainte-subnet-1"
+}
+
+resource "google_container_cluster" "main_cluster" {
+  name = var.gke_name
+
+  enable_autopilot         = true
+  enable_l4_ilb_subsetting = true
+
+  network    = data.google_compute_network.vpc.id
+  subnetwork = data.google_compute_subnetwork.subnet_1.id
+
+  deletion_protection = false
+}

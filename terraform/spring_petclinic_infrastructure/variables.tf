@@ -37,3 +37,8 @@ variable "sql_user_password" {
   type        = string
   description = "Password of the Cloud SQL database user"
 }
+
+variable "gke_name" {
+  type        = string
+  description = "Google Kubernetes Engine cluster name"
+}
