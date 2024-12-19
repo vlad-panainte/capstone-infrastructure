@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    options {
+        ansiColor('VGA')
+    }
     environment {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp_service_account')
         GCP_SERVICE_ACCOUNT_FILE = credentials('gcp_service_account')
