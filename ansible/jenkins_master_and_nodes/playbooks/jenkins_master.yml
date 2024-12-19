@@ -91,6 +91,7 @@
         - docker-commons
         - docker-workflow
         - docker-java-api
+        - ansicolor
       notify: Starting and enabling Jenkins service
 
     - name: Copying GCP Service Account key to home directory
