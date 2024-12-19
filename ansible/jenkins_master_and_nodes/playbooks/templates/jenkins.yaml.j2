@@ -21,6 +21,12 @@ credentials:
               password: "{{ gh_access_token }}"
               scope: GLOBAL
               username: "vlad-panainte"
+          - usernamePassword:
+              description: "Google Cloud SQL"
+              id: "sql_credentials"
+              password: "{{ sql_user_password }}"
+              scope: GLOBAL
+              username: "{{ sql_user_name }}"
           - file:
               description: "GCP Service Account"
               id: "gcp_service_account"
