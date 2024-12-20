@@ -58,11 +58,17 @@ resource "google_sql_database_instance" "cloud_sql" {
       disallow_username_substring = true
     }
   }
+  deletion_protection = false
 }
 
 resource "google_sql_user" "cloud_sql_user" {
   name     = var.sql_user_name
   password = var.sql_user_password
+  instance = google_sql_database_instance.cloud_sql.name
+}
+
+resource "google_sql_database" "cloud_sql_database" {
+  name     = "petclinic"
   instance = google_sql_database_instance.cloud_sql.name
 }
 

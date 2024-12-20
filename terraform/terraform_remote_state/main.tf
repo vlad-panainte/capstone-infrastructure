@@ -12,28 +12,17 @@ provider "google" {
   project = var.project_id
 }
 
-resource "google_storage_bucket" "terraform_state_bucket_jenkins" {
-  name     = var.terraform_state_bucket_name_jenkins
-  location = var.terraform_state_bucket_location
-
-  force_destroy               = true
-  uniform_bucket_level_access = true
-  public_access_prevention    = "enforced"
-
-  versioning {
-    enabled = true
-  }
+module "terraform_state_bucket_jenkins" {
+  source                      = "./modules/storage_bucket"
+  terraform_state_bucket_name = "vpanainte-terraform-state-jenkins"
 }
 
-resource "google_storage_bucket" "terraform_state_bucket_app" {
-  name     = var.terraform_state_bucket_name_app
-  location = var.terraform_state_bucket_location
+module "terraform_state_bucket_app" {
+  source                      = "./modules/storage_bucket"
+  terraform_state_bucket_name = "vpanainte-terraform-state-app"
+}
 
-  force_destroy               = true
-  uniform_bucket_level_access = true
-  public_access_prevention    = "enforced"
-
-  versioning {
-    enabled = true
-  }
+module "terraform_state_bucket_deployment" {
+  source                      = "./modules/storage_bucket"
+  terraform_state_bucket_name = "vpanainte-terraform-state-deployment"
 }
