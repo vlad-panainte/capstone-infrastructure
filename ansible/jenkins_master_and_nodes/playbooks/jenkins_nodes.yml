@@ -3,9 +3,9 @@
   hosts: vpanainte_capstone_jenkins_node
   become: true
   tasks:
-    - name: Installing Java Runtime for Jenkins agent
+    - name: Installing Java Development Kit for Jenkins agent
       ansible.builtin.apt:
-        name: default-jre
+        name: default-jdk
         state: present
         update_cache: true
 
