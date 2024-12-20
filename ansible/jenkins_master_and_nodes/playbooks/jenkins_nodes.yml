@@ -3,28 +3,14 @@
   hosts: vpanainte_capstone_jenkins_node
   become: true
   tasks:
-    - name: Installing Java Development Kit for Jenkins agent
-      ansible.builtin.apt:
-        name: default-jdk
-        state: present
-        update_cache: true
-
-    - name: Creating jenkins user
-      ansible.builtin.user:
-        name: jenkins
-        shell: /bin/bash
-        create_home: true
-        home: /home/jenkins
-        state: present
-
-    - name: Adding master node public key to the list of authorized_keys on agent nodes
-      ansible.posix.authorized_key:
-        user: jenkins
-        state: present
-        key: "{{ ssh_key }}"
-
     - name: Installing required packages
       block:
+        - name: Installing Java Development Kit for Jenkins agent
+          ansible.builtin.apt:
+            name: default-jdk
+            state: present
+            update_cache: true
+
         - name: Installing Docker GPG key
           ansible.builtin.get_url:
             url: https://download.docker.com/linux/ubuntu/gpg
@@ -84,3 +70,19 @@
           ansible.builtin.apt:
             name: ansible-lint
             state: present
+
+    - name: Creating jenkins user
+      ansible.builtin.user:
+        name: jenkins
+        shell: /bin/bash
+        create_home: true
+        home: /home/jenkins
+        groups: docker
+        append: true
+        state: present
+
+    - name: Adding master node public key to the list of authorized_keys on agent nodes
+      ansible.posix.authorized_key:
+        user: jenkins
+        state: present
+        key: "{{ ssh_key }}"
