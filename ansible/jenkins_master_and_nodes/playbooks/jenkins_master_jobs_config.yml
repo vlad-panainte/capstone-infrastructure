@@ -5,6 +5,11 @@
   vars_files:
     - vars/vars.yml
   tasks:
+    - name: Restarting Jenkins service
+      ansible.builtin.systemd_service:
+        name: jenkins.service
+        state: restarted
+
     - name: Downloading Jenkins CLI from master node
       ansible.builtin.get_url:
         url: http://localhost:8080/jnlpJars/jenkins-cli.jar
