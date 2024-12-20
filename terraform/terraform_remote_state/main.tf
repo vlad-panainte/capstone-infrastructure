@@ -21,3 +21,8 @@ module "terraform_state_bucket_app" {
   source                      = "./modules/storage_bucket"
   terraform_state_bucket_name = "vpanainte-terraform-state-app"
 }
+
+module "terraform_state_bucket_deployment" {
+  source                      = "./modules/storage_bucket"
+  terraform_state_bucket_name = "vpanainte-terraform-state-deployment"
+}
