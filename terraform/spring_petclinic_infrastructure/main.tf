@@ -67,6 +67,11 @@ resource "google_sql_user" "cloud_sql_user" {
   instance = google_sql_database_instance.cloud_sql.name
 }
 
+resource "google_sql_database" "cloud_sql_database" {
+  name     = "petclinic"
+  instance = google_sql_database_instance.cloud_sql.name
+}
+
 data "google_compute_network" "vpc" {
   name = "vpanainte-vpc"
 }
