@@ -83,7 +83,7 @@ pipeline {
         stage('InfraPlan') {
             steps {
                 echo 'Planning the deployment of the application'
-                sh 'terraform -chdir=terraform/spring_petclinic_infrastructure -lock-timeout=10m plan'
+                sh 'terraform -chdir=terraform/spring_petclinic_infrastructure plan -lock-timeout=10m'
             }
         }
 
@@ -96,7 +96,7 @@ pipeline {
                 input message: 'Should we start the provisioning of the infrastructure?', ok: 'Yes'
 
                 echo 'Starting the infrastructure provisioning for spring-petclinic application'
-                sh 'terraform -chdir=terraform/spring_petclinic_infrastructure -lock-timeout=10m apply --auto-approve'
+                sh 'terraform -chdir=terraform/spring_petclinic_infrastructure apply -lock-timeout=10m --auto-approve'
             }
         }
 
@@ -109,7 +109,7 @@ pipeline {
                 input message: 'Should we destroy the current the infrastructure?', ok: 'Yes'
 
                 echo 'Starting to destroythe infrastructure for spring-petclinic application'
-                sh 'terraform -chdir=terraform/spring_petclinic_infrastructure -lock-timeout=10m destroy --auto-approve'
+                sh 'terraform -chdir=terraform/spring_petclinic_infrastructure destroy -lock-timeout=10m --auto-approve'
             }
         }
     }
