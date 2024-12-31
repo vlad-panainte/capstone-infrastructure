@@ -81,6 +81,12 @@ pipeline {
         }
 
         stage('InfraPlan') {
+            when {
+                anyOf {
+                    changeRequest()
+                    branch 'main'
+                }
+            }
             steps {
                 echo 'Planning the deployment of the application'
                 sh 'terraform -chdir=terraform/spring_petclinic_infrastructure plan -lock-timeout=10m'
