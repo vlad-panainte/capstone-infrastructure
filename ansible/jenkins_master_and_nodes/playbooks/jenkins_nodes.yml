@@ -46,6 +46,7 @@
               - ansible
               - unzip
               - python3-google-auth
+              - acl
             state: present
 
         - name: Installing yamlfmt
@@ -82,3 +83,19 @@
         user: jenkins
         state: present
         key: "{{ ssh_key }}"
+
+    - name: Configuring git username and email for jenkins user
+      become: true
+      become_user: jenkins
+      block:
+        - name: Configuring git username
+          ansible.builtin.git_config:
+            scope: global
+            name: user.name
+            value: jenkins
+
+        - name: Configuring git email address
+          ansible.builtin.git_config:
+            scope: global
+            name: user.email
+            value: jenkins@jenkins.io
