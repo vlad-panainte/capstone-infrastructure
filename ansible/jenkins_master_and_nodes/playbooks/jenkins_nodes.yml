@@ -89,13 +89,13 @@
       become_user: jenkins
       block:
         - name: Configuring git username
-          ansible.builtin.git_config:
+          community.general.git_config:
             scope: global
             name: user.name
             value: jenkins
 
         - name: Configuring git email address
-          ansible.builtin.git_config:
+          community.general.git_config:
             scope: global
             name: user.email
             value: jenkins@jenkins.io
