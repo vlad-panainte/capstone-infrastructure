@@ -8,7 +8,7 @@ pipeline {
         GCP_SERVICE_ACCOUNT_FILE = credentials('gcp_service_account')
         SQL_CREDENTIALS = credentials('sql_credentials')
         GCP_AUTH_KIND = 'serviceaccount'
-        TF_VAR_project_id = 'gd-gcp-internship-devops'
+        TF_VAR_project_id = 'gd-gcp-gridu-devops-t1-t2'
         TF_VAR_region = 'europe-central2'
         TF_VAR_zone = 'europe-central2-a'
         TF_VAR_jenkins_nodes_number = 2
