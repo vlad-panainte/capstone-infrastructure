@@ -44,6 +44,12 @@ resource "google_sql_database_instance" "cloud_sql" {
     edition   = "ENTERPRISE"
     tier      = "db-g1-small"
     disk_size = "10"
+
+    connector_enforcement = "REQUIRED"
+    ip_configuration {
+      ssl_mode = "TRUSTED_CLIENT_CERTIFICATE_REQUIRED"
+    }
+
     location_preference {
       zone = var.zone
     }
