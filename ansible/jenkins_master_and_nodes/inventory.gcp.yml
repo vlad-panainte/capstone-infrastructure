@@ -3,7 +3,7 @@ plugin: google.cloud.gcp_compute
 zones:
   - europe-central2-a
 projects:
-  - gd-gcp-internship-devops
+  - gd-gcp-gridu-devops-t1-t2
 filters:
   - labels.capstone=jenkins-master OR labels.capstone=jenkins-node
 keyed_groups:
