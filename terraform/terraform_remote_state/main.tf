@@ -14,15 +14,15 @@ provider "google" {
 
 module "terraform_state_bucket_jenkins" {
   source                      = "./modules/storage_bucket"
-  terraform_state_bucket_name = "vpanainte-terraform-state-jenkins"
+  terraform_state_bucket_name = "vpanainte-tfstate-jenkins"
 }
 
 module "terraform_state_bucket_app" {
   source                      = "./modules/storage_bucket"
-  terraform_state_bucket_name = "vpanainte-terraform-state-app"
+  terraform_state_bucket_name = "vpanainte-tfstate-app"
 }
 
 module "terraform_state_bucket_deployment" {
   source                      = "./modules/storage_bucket"
-  terraform_state_bucket_name = "vpanainte-terraform-state-deployment"
+  terraform_state_bucket_name = "vpanainte-tfstate-deployment"
 }
