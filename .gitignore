@@ -8,3 +8,6 @@
 
 # Ansible
 vars.yml
+
+# Python
+.venv
