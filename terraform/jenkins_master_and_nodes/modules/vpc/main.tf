@@ -48,3 +48,17 @@ resource "google_compute_firewall" "firewall_v6" {
 
   network = google_compute_network.vpc.name
 }
+
+resource "google_compute_firewall" "jenkins" {
+  name = "vpanainte-jenkins"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["8080"]
+  }
+
+  source_ranges      = ["0.0.0.0/0"]
+  destination_ranges = ["10.0.0.2/32"]
+
+  network = google_compute_network.vpc.name
+}
