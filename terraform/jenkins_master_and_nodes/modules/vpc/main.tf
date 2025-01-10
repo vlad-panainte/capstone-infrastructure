@@ -54,7 +54,7 @@ resource "google_compute_firewall" "jenkins" {
 
   allow {
     protocol = "tcp"
-    ports    = ["8080"]
+    ports    = ["8080", "80", "443"]
   }
 
   source_ranges      = ["0.0.0.0/0"]
