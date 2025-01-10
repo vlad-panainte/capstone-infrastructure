@@ -1,9 +1,9 @@
 terraform {
-  required_version = "~> 1.10.3"
+  required_version = "~> 1.10.4"
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 6.14.1"
+      version = "~> 6.15.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -44,6 +44,12 @@ resource "google_sql_database_instance" "cloud_sql" {
     edition   = "ENTERPRISE"
     tier      = "db-g1-small"
     disk_size = "10"
+
+    connector_enforcement = "REQUIRED"
+    ip_configuration {
+      ssl_mode = "TRUSTED_CLIENT_CERTIFICATE_REQUIRED"
+    }
+
     location_preference {
       zone = var.zone
     }

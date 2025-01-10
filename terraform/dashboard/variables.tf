@@ -13,11 +13,7 @@ variable "zone" {
   description = "Zone of the infrastructure"
 }
 
-variable "jenkins_nodes_number" {
-  type        = number
-  description = "Jenkins nodes amount"
-}
-variable "jenkins_master_static_public_ip" {
+variable "dashboard_json_file_path" {
   type        = string
-  description = "Jenkins master static public IP address"
+  description = "GCP Dashboard json file path"
 }

@@ -1,9 +1,9 @@
 terraform {
-  required_version = "~> 1.10.3"
+  required_version = "~> 1.10.4"
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 6.14.1"
+      version = "~> 6.15.0"
     }
   }
   backend "gcs" {
@@ -28,6 +28,7 @@ module "jenkins_master" {
   jenkins_instance_name = "vpanainte-jenkins-master"
   jenkins_instance_id   = "jenkins-master"
   jenkins_internal_ip   = "10.0.0.2"
+  jenkins_public_ip     = var.jenkins_master_static_public_ip
 }
 
 module "jenkins_node" {
@@ -39,4 +40,5 @@ module "jenkins_node" {
   jenkins_instance_id   = "jenkins-node"
   jenkins_instance_type = "e2-highcpu-4"
   jenkins_internal_ip   = "10.0.0.${count.index + 3}"
+  jenkins_public_ip     = null
 }
