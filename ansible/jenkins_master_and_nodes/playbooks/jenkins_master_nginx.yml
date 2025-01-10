@@ -9,7 +9,7 @@
         state: present
 
     - name: Installing CertBot
-      ansible.builtin.snap:
+      community.general.snap:
         name: certbot
         classic: true
 
