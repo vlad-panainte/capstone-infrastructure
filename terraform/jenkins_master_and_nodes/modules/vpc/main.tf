@@ -49,12 +49,26 @@ resource "google_compute_firewall" "firewall_v6" {
   network = google_compute_network.vpc.name
 }
 
-resource "google_compute_firewall" "jenkins" {
-  name = "vpanainte-jenkins"
+resource "google_compute_firewall" "jenkins-http-https" {
+  name = "vpanainte-jenkins-http-https"
 
   allow {
     protocol = "tcp"
-    ports    = ["8080"]
+    ports    = ["80", "443"]
+  }
+
+  source_ranges      = ["0.0.0.0/0"]
+  destination_ranges = ["10.0.0.2/32"]
+
+  network = google_compute_network.vpc.name
+}
+
+resource "google_compute_firewall" "jenkins-quic" {
+  name = "vpanainte-jenkins-quic"
+
+  allow {
+    protocol = "udp"
+    ports    = ["443"]
   }
 
   source_ranges      = ["0.0.0.0/0"]

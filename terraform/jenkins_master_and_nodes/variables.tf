@@ -17,3 +17,7 @@ variable "jenkins_nodes_number" {
   type        = number
   description = "Jenkins nodes amount"
 }
+variable "jenkins_master_static_public_ip" {
+  type        = string
+  description = "Jenkins master static public IP address"
+}
