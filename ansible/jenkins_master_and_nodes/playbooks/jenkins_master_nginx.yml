@@ -1,0 +1,45 @@
+---
+- name: Configuring NGINX
+  hosts: vpanainte_capstone_jenkins_master
+  become: true
+  tasks:
+    - name: Installing NGINX
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Installing CertBot
+      community.general.snap:
+        name: certbot
+        classic: true
+
+    - name: Copying NGINX configuration
+      ansible.builtin.copy:
+        src: ./files/nginx.conf
+        dest: /etc/nginx/
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Creating NGINX cache directories
+      ansible.builtin.file:
+        path: /var/cache/nginx
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0700'
+
+    - name: Fetching SSL certificate using CertBot
+      block:
+        - name: Stopping NGINX
+          ansible.builtin.systemd_service:
+            name: nginx.service
+            state: stopped
+        - name: Fetching SSL certificate
+          ansible.builtin.command: "certbot certonly -n --agree-tos -m jenkins@jenkins.io --standalone --staple-ocsp --must-staple -d jenkins.gennerator.com"
+          args:
+            creates: /etc/letsencrypt/live/jenkins.gennerator.com
+        - name: Starting NGINX
+          ansible.builtin.systemd_service:
+            name: nginx.service
+            state: started

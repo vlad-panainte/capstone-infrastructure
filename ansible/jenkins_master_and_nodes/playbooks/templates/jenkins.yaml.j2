@@ -209,7 +209,7 @@ unclassified:
     configs:
       - credentialsId: "github_access_token"
         name: "GitHub - Default"
-    hookUrl: "http://{{ master_public_ip }}:8080/github-webhook/"
+    hookUrl: "https://jenkins.gennerator.com/github-webhook/"
   globalTimeOutConfiguration:
     operations:
       - "abortOperation"
@@ -218,7 +218,7 @@ unclassified:
     storage: "file"
   location:
     adminAddress: "{{ jenkins_new_admin_email }}"
-    url: "http://{{ master_public_ip }}:8080/"
+    url: "https://jenkins.gennerator.com/"
   mailer:
     charset: "UTF-8"
     useSsl: false
