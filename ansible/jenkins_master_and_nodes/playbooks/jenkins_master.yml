@@ -104,7 +104,6 @@
 
     - name: Copying Jekins Configuration as Code file to Jenkins directory
       vars:
-        master_public_ip: "{{ groups['vpanainte_capstone_jenkins_master'][0] }}"
         node_count: "{{ groups['vpanainte_capstone_jenkins_node'] | length }}"
         node_thread_count: "{{ ansible_processor_nproc }}"
       ansible.builtin.template:

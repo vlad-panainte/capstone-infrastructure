@@ -12,3 +12,6 @@
 
 - name: Configuring Jenkins pipelines
   ansible.builtin.import_playbook: jenkins_master_jobs_config.yml
+
+- name: Configuring NGINX
+  ansible.builtin.import_playbook: jenkins_master_nginx.yml
