@@ -20,6 +20,11 @@ variable "jenkins_internal_ip" {
   default     = null
 }
 
+variable "jenkins_public_ip" {
+  type        = string
+  description = "Jenkins instance public ip"
+}
+
 variable "jenkins_image" {
   type        = string
   description = "Boot disk image"
@@ -29,4 +34,5 @@ variable "jenkins_image" {
 variable "jenkins_instance_id" {
   type        = string
   description = "Instance ID"
+
 }
